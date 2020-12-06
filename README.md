@@ -83,4 +83,8 @@ Communication with the robot is primarily relayed through a cloud server.
 
 For you convenience, I've included `./getSockAddr.sh`. Read it and then provide it with `username password`.
 
+## The vacuum robot software
+**Finding 3**: The vacuum robot does not perform TLS validation.
+Using [sslsplit](https://github.com/droe/sslsplit) we can see, what the robot is talking with its manufacturer.
+
 **TLDR**: Don't buy this crap.
