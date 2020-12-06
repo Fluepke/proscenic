@@ -16,9 +16,9 @@ You can find the latest firmware (as of 06.12.2020) in `./firmware.bin`.
 ## App
 Logging in
 ```bash
-USERNAME=iot@example.com
+LOGINUSER=iot@example.com
 PASSWORD=very-secure
-curl -v -k -X POST -H "os: i" -H "Content-Type: application/json" -H "c: 338" -H "lan: en" -H "Host: mobile.proscenic.com.de:443" -H "User-Agent: ProscenicHome/1.7.8 (iPhone; iOS 14.2.1; Scale/3.00)" -H "v: 1.7.8" -d "{\"state\":\"欧洲\",\"countryCode\":\"49\",\"appVer\":\"1.7.8\",\"type\":\"2\",\"os\":\"IOS\",\"password\":\"$(echo -n $PASSWORD | md5sum)\",\"registrationId\":\"13165ffa4eb156ac484\",\"language\":\"EN\",\"username\":\"$USERNAME\",\"pwd\":\"$PASSWORD\"}" "https://mobile.proscenic.com.de/user/login"
+curl -v -k -X POST -H "os: i" -H "Content-Type: application/json" -H "c: 338" -H "lan: en" -H "Host: mobile.proscenic.com.de:443" -H "User-Agent: ProscenicHome/1.7.8 (iPhone; iOS 14.2.1; Scale/3.00)" -H "v: 1.7.8" -d "{\"state\":\"欧洲\",\"countryCode\":\"49\",\"appVer\":\"1.7.8\",\"type\":\"2\",\"os\":\"IOS\",\"password\":\"$(echo -n $PASSWORD | md5sum)\",\"registrationId\":\"13165ffa4eb156ac484\",\"language\":\"EN\",\"username\":\"$LOGINUSER\",\"pwd\":\"$PASSWORD\"}" "https://mobile.proscenic.com.de/user/login"
 ```
 response
 ```json
@@ -38,9 +38,9 @@ response
 ```
 
 Get list of devices:
-> **Finding #1**: No login (only username) required
+> **Findind #1**: No login (only username) required
 ```bash
-curl "https://mobile.proscenic.com.de/user/getEquips/$USERNAME"  -d "username=$USERNAME"
+curl "https://mobile.proscenic.com.de/user/getEquips/$LOGINUSER"  -d "username=$LOGINUSER"
 ```
 response
 ```json
@@ -68,3 +68,19 @@ response
 ]
 ```
 
+**Finding 2**: The serial number retrieved from above can be used to send arbitrary commands:
+```java
+    @FormUrlEncoded
+    @POST("/instructions/{sn}/{cmdCode}")
+    Observable<Result> control(@Field("username") String str, @Path("sn") String str2, @Path("cmdCode") int i, @Field("ctrlCode") String str3);
+```
+E.g.:
+```bash
+curl -X POST  -d "charge=start" "https://mobile.proscenic.com.de/instructions/$SN/21012?username=$LOGINUSER"
+```
+
+Communication with the robot is primarily relayed through a cloud server.
+
+For you convenience, I've included `./getSockAddr.sh`. Read it and then provide it with `username password`.
+
+**TLDR**: Don't buy this crap.
