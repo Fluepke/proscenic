@@ -87,4 +87,25 @@ For you convenience, I've included `./getSockAddr.sh`. Read it and then provide 
 **Finding 3**: The vacuum robot does not perform TLS validation.
 Using [sslsplit](https://github.com/droe/sslsplit) we can see, what the robot is talking with its manufacturer.
 
+**Finding 4**: This robot is spying on you: It uploads a map of your home. As can be seen using sslsplit:
+```
+POST /cleanPack/uploadEvents HTTP/1.1
+Host: 47.254.140.182
+Accept: */*
+Cookie: cookies=<redacted>
+Content-Length: 1593
+Content-Type: application/x-www-form-urlencoded
+Expect: 100-continue
+
+HTTP/1.1 100 Continue
+
+sn=LSLDSM7PRO20510667&ts=348470&data={"infoType":20002,"data":{"SN":"LSLDSM7PRO20510667","mapId":1607215533,"autoAreaId":0,"pathId":1607237159,"width":109,"height":98,"resolution":0.05,"x_min":-4.93,"y_min":-2.83,"lz4_len":935,"area":[],"map":<redacted>
+```
+
+**Finding 5**: The app reveals the crypto token plaintext while communicating with the robot through the gateway.
+```
+{"data":{"token":"<redacted>","sn":"<redacted>"},"infoType":70001}#	#
+```
+this is sent to the IP and port retrieved by `getSockAddr`.
+
 **TLDR**: Don't buy this crap.
