@@ -108,4 +108,6 @@ sn=LSLDSM7PRO20510667&ts=348470&data={"infoType":20002,"data":{"SN":"LSLDSM7PRO2
 ```
 this is sent to the IP and port retrieved by `getSockAddr`.
 
+**Finding 6**: Old tokens (fetched with the script) don't expire. Even if the app only allows for one simultanous login.
+
 **TLDR**: Don't buy this crap.
